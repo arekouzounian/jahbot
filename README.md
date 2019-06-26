@@ -16,4 +16,3 @@ MAIN FEATURES:
 CURRENTLY IN PROGRESS:
 - voice capabilities; the bot is able to connect to the channel but is unable to play music. 
 
-sd
