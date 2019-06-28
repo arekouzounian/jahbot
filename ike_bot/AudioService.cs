@@ -7,7 +7,7 @@ using Discord.Audio;
 
 namespace ike_bot
 {
-    public class AudioService
+    public class AudioService 
     {
         public AudioService() { }
 

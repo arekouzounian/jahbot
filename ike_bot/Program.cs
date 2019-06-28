@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -81,87 +80,23 @@ namespace ike_bot
             if (Context.Message == null || Context.Message.Content == "") return;
             if (Context.User.IsBot) return;
 
-            
-
-            antiSpam(Message.Author.Id);
-            async void antiSpam(ulong id)
-            {
-                if(Context.Channel.Id == 579185404842999818)
-                {
-                    return;
-                }
-                lastMessageIDs.Add(id);
-                var users = await Context.Channel.GetUsersAsync().FlattenAsync();
-                ulong mostMessagesID = 0;
-                int mostMessagesCount = 0;
-                var demotedRole = Context.Guild.GetRole(579569542188236800) as IRole;
-                foreach (var user in users)
-                {
-                    if(user.IsBot)
-                    {
-                        continue; 
-                    }
-                    int msgCount = 0; 
-                    for(int i = 0; i < lastMessageIDs.Count; i++)
-                    {
-                        if (lastMessageIDs[i] == user.Id)
-                        {
-                            msgCount++;
-                        }
-                    }
-
-                    if (msgCount > mostMessagesCount)
-                    {
-                        mostMessagesCount = msgCount;
-                        mostMessagesID = user.Id;
-                    }
-                }
-                if(mostMessagesCount >= 30)
-                {
-                    await (Context.Guild.GetUser(mostMessagesID) as IGuildUser).AddRoleAsync(demotedRole);
-                    await Task.Delay(120000);
-                    await (Context.Guild.GetUser(mostMessagesID) as IGuildUser).RemoveRoleAsync(demotedRole);
-                    mostMessagesID = 0;
-                    mostMessagesCount = 0; 
-                }
-
-                if(lastMessageIDs.Count > 50)
-                {
-                    lastMessageIDs.RemoveAt(index);
-                    index++;
-                    if (index == 50)
-                    {
-                        index = 0;
-                    }
-                }
-                
-            }
-
+            antiSpam(Message.Author.Id, Context);
 
             Random gen = new Random();
             if (gen.Next(0, 101) <= retortPercent && Context.Channel.Id != 579185404842999818)
             {
-                
                 if(gen.Next(0, 6) <= 2)
-                {
                     await Context.Channel.SendFileAsync(@"C:\Users\agouz\Desktop\Important Pictures\deformedman.jpg");
-                }
                 else
-                {
                     await Context.Channel.SendMessageAsync("fuck you");
-                }
             }
 
             int ArgPos = 0;
 
             if ((Context.Channel.Id == 579185404842999818 && Context.Message.Content != "a"))
-            {
                 await Context.Channel.DeleteMessageAsync(Message.Id);
-            }
             if (!(Message.HasStringPrefix("jahbot ", ref ArgPos)) || (Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos)))
-            {
                 return;
-            }
             
 
             var Result = await Commands.ExecuteAsync(Context, ArgPos, services);
@@ -172,18 +107,59 @@ namespace ike_bot
                 if (Context.Channel.Id != 579185404842999818)
                 {
                     if (Result.ErrorReason == "User requires guild permission Administrator.")
-                    {
                         await Context.Channel.SendMessageAsync("dumpass... you need special perms to use this command.");
-                    }
                     else
-                    {
                         await Context.Channel.SendMessageAsync("wrong command dumpass");
-                    }
                 }
             }
 
         }
+        private async void antiSpam(ulong id, SocketCommandContext Context)
+        {
+            if (Context.Channel.Id == 579185404842999818)
+                return;
+            
+            lastMessageIDs.Add(id);
+            var users = await Context.Channel.GetUsersAsync().FlattenAsync();
+            ulong mostMessagesID = 0;
+            int mostMessagesCount = 0;
+            var demotedRole = Context.Guild.GetRole(579569542188236800) as IRole;
+            foreach (var user in users)
+            {
+                if (user.IsBot)
+                    continue;
 
-        
+                int msgCount = 0;
+                for (int i = 0; i < lastMessageIDs.Count; i++)
+                {
+                    if (lastMessageIDs[i] == user.Id)
+                        msgCount++;
+                }
+
+                if (msgCount > mostMessagesCount)
+                {
+                    mostMessagesCount = msgCount;
+                    mostMessagesID = user.Id;
+                }
+            }
+            if (mostMessagesCount >= 30)
+            {
+                await (Context.Guild.GetUser(mostMessagesID) as IGuildUser).AddRoleAsync(demotedRole);
+                await Task.Delay(120000);
+                await (Context.Guild.GetUser(mostMessagesID) as IGuildUser).RemoveRoleAsync(demotedRole);
+                mostMessagesID = 0;
+                mostMessagesCount = 0;
+            }
+
+            if (lastMessageIDs.Count > 50)
+            {
+                lastMessageIDs.RemoveAt(index);
+                index++;
+
+                if (index == 50)
+                    index = 0;
+            }
+
+        }
     }
 }
