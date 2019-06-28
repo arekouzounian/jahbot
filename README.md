@@ -12,7 +12,8 @@ MAIN FEATURES:
 - regulates a channel called '#a,' where you can only send a message that is the letter a. Otherwise, your message is automatically deleted.
 - spam: can send a simple message as many times as the command specifies
 - purge: deletes a certain amount of messages in the chat. 
+- music: given a link, jahbot can now play any youtube video in the channel you're in! 
 
 CURRENTLY IN PROGRESS:
-- voice capabilities; the bot is able to connect to the channel but is unable to play music. 
+- random commands/features; added at the discretion of creator and usually are just shortcuts for other commands.
 
