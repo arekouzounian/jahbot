@@ -44,7 +44,7 @@ namespace ike_bot
             }
         }
 
-        [Command("purge", RunMode = RunMode.Async)]
+        [Command("delete", RunMode = RunMode.Async)]
         [Summary("Deletes the specified amount of messages.")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
@@ -191,13 +191,20 @@ namespace ike_bot
         {
             //var channel;
             IVoiceChannel channel = (Context.User as IGuildUser).VoiceChannel;
-            var audioClient = await audio.ConnectAudio(Context, channel as SocketVoiceChannel);
+            var audioClient = await audio.ConnectAudio(Context);
             if (audioClient == null)
             {
                 return;
             }
 
             await audio.Stream(audioClient, url);
+        }
+
+        [Command("randomsound"), Alias("loud ass sound")]
+        [RequireContext(ContextType.Guild)]
+        public async Task randomSound()
+        {
+            await Join("https://www.youtube.com/watch?v=jm1b_Xl9RmU");
         }
 
         [Command("disconnect", RunMode = RunMode.Async), Alias("leave", "go away")]
@@ -222,6 +229,7 @@ namespace ike_bot
         }
 
         [Command("Bites the Dust")] 
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task bitesTheDust()
         {
             await PurgeChat(50);
@@ -241,6 +249,7 @@ namespace ike_bot
         }
 
         [Command("JAH WARUDO")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task stopTime()
         {
             var Message = await Context.Channel.GetMessagesAsync(1).FlattenAsync();

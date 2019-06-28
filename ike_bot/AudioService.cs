@@ -1,12 +1,9 @@
-﻿using Discord;
-using Discord.Audio;
+﻿using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using Discord.Audio;
 
 namespace ike_bot
 {
@@ -14,14 +11,16 @@ namespace ike_bot
     {
         public AudioService() { }
 
-        public async Task<IAudioClient> ConnectAudio(SocketCommandContext context, SocketVoiceChannel chan)
+        public async Task<IAudioClient> ConnectAudio(SocketCommandContext context)
         {
-            if (chan == null)
+            SocketGuildUser user = context.User as SocketGuildUser;
+            IVoiceChannel channel = user.VoiceChannel;
+            if (channel == null)
             {
-                await context.Message.Channel.SendMessageAsync("User must be in a voice channel, or a voice channel must be passed as an argument.");
+                await context.Message.Channel.SendMessageAsync("User must be in a voice channel dumpass");
                 return null;
             }
-            return await chan.ConnectAsync();
+            return await channel.ConnectAsync();
         }
 
         public async Task Stream(IAudioClient client, string url)
@@ -43,7 +42,6 @@ namespace ike_bot
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
             };
-
             return Process.Start(ffmpeg);
         }
     }

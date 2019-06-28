@@ -60,7 +60,7 @@ namespace ike_bot
 
             await Task.Delay(-1);
         }
-        //test
+        
         private async Task Client_Log(LogMessage Message)
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
