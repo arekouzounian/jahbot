@@ -4,9 +4,12 @@ using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace ike_bot.Core.Commands
-{
+{ 
     public class ModerationCommands : ModuleBase<SocketCommandContext>
     {
+        public ModerationCommands() { }
+
+
         [Command("rename")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ChangeNickname)]

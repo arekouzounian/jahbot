@@ -18,6 +18,9 @@ namespace ike_bot
 
         public static int retortPercent = 10;
 
+        public static bool KingCrimsonActivated = false;
+        public int kingCrimsonCount = 0;
+
         static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -67,7 +70,7 @@ namespace ike_bot
 
         private async Task Client_Ready()
         {
-            await Client.SetGameAsync("with pyro gaming");
+            await Client.SetGameAsync("Jump Force");
         }
 
         List<ulong> lastMessageIDs = new List<ulong>();
@@ -76,6 +79,18 @@ namespace ike_bot
         {
             var Message = MessageParam as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
+
+            if(KingCrimsonActivated)
+            {
+                retortPercent = 0;
+                if(kingCrimsonCount == 10)
+                {
+                    await Context.Channel.SendMessageAsync("King Crimson has activated...");
+                    KingCrimsonActivated = false; 
+                }
+                await Message.DeleteAsync();
+                kingCrimsonCount++;
+            }
 
             if (Context.Message == null || Context.Message.Content == "") return;
             if (Context.User.IsBot) return;
@@ -114,6 +129,8 @@ namespace ike_bot
             }
 
         }
+
+
         private async void antiSpam(ulong id, SocketCommandContext Context)
         {
             if (Context.Channel.Id == 579185404842999818)

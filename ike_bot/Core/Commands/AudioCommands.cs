@@ -7,10 +7,10 @@ namespace ike_bot.Core.Commands
     public class AudioCommands : ModuleBase<SocketCommandContext>
     {
         public AudioService audio { get; set; }
+        public AudioCommands() { }
 
         [Command("play", RunMode = RunMode.Async)]
         [RequireContext(ContextType.Guild)]
-        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task JoinAndPlay(string url)
         {
             //var channel;
@@ -25,7 +25,7 @@ namespace ike_bot.Core.Commands
         }
 
         [Command("randomsound"), Alias("loud ass sound")]
-        [RequireContext(ContextType.Guild)]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task randomSound()
         {
             await JoinAndPlay("https://www.youtube.com/watch?v=jm1b_Xl9RmU");
@@ -43,6 +43,26 @@ namespace ike_bot.Core.Commands
             {
                 await channel.DisconnectAsync();
             }
+        }
+
+        [Command("ZA HANDO")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task zaHando(string username)
+        {
+            await JoinAndPlay("https://www.youtube.com/watch?v=FuM8GpMc59M");
+
+            var users = await Context.Channel.GetUsersAsync().FlattenAsync();
+            foreach(var user in users)
+            {
+                if (user.Username == username)
+                {
+                    await (user as IGuildUser).ModifyAsync(x =>
+                    {
+                        x.Channel = null;
+                    });
+                }
+            }
+            await Disconnect();
         }
     }
 }
