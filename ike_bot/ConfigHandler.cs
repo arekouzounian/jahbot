@@ -33,12 +33,6 @@ namespace ike_bot
 
             if (!File.Exists(configPath))
             {
-                //using (var f = File.Create(configPath))
-                //{
-                //    DirectoryInfo dInfo = new DirectoryInfo(configPath);
-                //    DirectorySecurity dSecurity = dInfo.GetAccessControl();
-                //}
-
                 using (StreamWriter sw = File.AppendText(configPath))
                 {
                     sw.WriteLine(JsonConvert.SerializeObject(conf));
