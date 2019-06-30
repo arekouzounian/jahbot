@@ -69,5 +69,21 @@ namespace ike_bot.Core.Commands
             }
             Program.retortPercent = newPercent;
         }
+
+        [Command("check a")]
+        public async Task cleanChat(int amount)
+        {
+            var aChannel = Context.Guild.GetChannel(579185404842999818);
+            var messages = await (aChannel as ISocketMessageChannel).GetMessagesAsync().FlattenAsync();
+            foreach(var message in messages)
+            {
+                if(message.Content != "a")
+                {
+                    await (aChannel as ISocketMessageChannel).DeleteMessageAsync(message);
+                }
+            }
+
+            await (aChannel as ISocketMessageChannel).SendMessageAsync("a");
+        }
     }
 }
