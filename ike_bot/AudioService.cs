@@ -12,7 +12,7 @@ namespace ike_bot
         public AudioService() { }
 
         public async Task<IAudioClient> ConnectAudio(SocketCommandContext context)
-        {
+        { 
             SocketGuildUser user = context.User as SocketGuildUser;
             IVoiceChannel channel = user.VoiceChannel;
             if (channel == null)

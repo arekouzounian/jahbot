@@ -10,6 +10,7 @@ namespace ike_bot.Core.Commands
 
         [Command("play", RunMode = RunMode.Async)]
         [RequireContext(ContextType.Guild)]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task JoinAndPlay(string url)
         {
             //var channel;
