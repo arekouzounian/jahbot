@@ -32,6 +32,29 @@ namespace ike_bot
             await discord.FlushAsync();
         }
 
+        public async Task DisconnectAudio(SocketCommandContext Context, IVoiceChannel channel)
+        {
+            if (channel == null)
+            {
+                await Context.Channel.SendMessageAsync("dumpass....");
+            }
+            else
+            {
+                await channel.DisconnectAsync();
+            }
+        }
+
+        public async Task JoinAndPlay(SocketCommandContext Context, string url)
+        {
+            var audioClient = await ConnectAudio(Context);
+            if (audioClient == null)
+            {
+                return;
+            }
+
+            await Stream(audioClient, url);
+        }
+
         private Process CreateYoutubeStream(string url)
         {
             ProcessStartInfo ffmpeg = new ProcessStartInfo

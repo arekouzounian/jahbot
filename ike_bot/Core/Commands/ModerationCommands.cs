@@ -9,39 +9,23 @@ namespace ike_bot.Core.Commands
     {
         public ModerationCommands() { }
 
+        public ModerationService modService { get; set; }
 
         [Command("rename")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ChangeNickname)]
         public async Task Rename(string newName)
         {
-            var users = await Context.Channel.GetUsersAsync().FlattenAsync();
-            foreach (IUser user in users)
-            {
-                var newUser = user as SocketGuildUser;
-                if (newUser.Id == 220710429083697152)
-                {
-                    continue;
-                }
-                else
-                {
-                    await newUser.ModifyAsync(x =>
-                    {
-                        x.Nickname = newName;
-                    });
-                }
-            }
-
+            await modService.RenameAll(Context, newName);
             await Context.Channel.SendMessageAsync("Done!");
-
         }
 
         [Command("unname")]
-        [RequireUserPermission(GuildPermission.ChangeNickname)]
+        [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ChangeNickname)]
         public async Task UnName()
         {
-            await Rename("");
+            await modService.RenameAll(Context, "");
         }
 
         [Command("delete", RunMode = RunMode.Async)]
@@ -50,12 +34,7 @@ namespace ike_bot.Core.Commands
         [RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task PurgeChat(int amount)
         {
-            var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
-
-            foreach (var message in messages)
-            {
-                await Context.Channel.DeleteMessageAsync(message);
-            }
+            await modService.DeleteMessages(Context, amount);
             const int delay = 5000;
             var m = await ReplyAsync($"Purge completed. _This message will be deleted in {delay / 1000} seconds._");
             await Task.Delay(delay);

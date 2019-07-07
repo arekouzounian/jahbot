@@ -20,6 +20,7 @@ namespace ike_bot
 
         public static bool KingCrimsonActivated = false;
         public int kingCrimsonCount = 0;
+        public static int kingCrimsonAmount = 11;
 
         static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
@@ -46,6 +47,7 @@ namespace ike_bot
                 .AddSingleton(Commands)
                 .AddSingleton<ConfigHandler>()
                 .AddSingleton<AudioService>()
+                .AddSingleton<ModerationService>()
                 .BuildServiceProvider();
 
             await services.GetService<ConfigHandler>().FillConfig();
@@ -62,7 +64,8 @@ namespace ike_bot
 
             await Task.Delay(-1);
         }
-        
+
+
         private async Task Client_Log(LogMessage Message)
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
@@ -86,7 +89,8 @@ namespace ike_bot
                 if(kingCrimsonCount == 10)
                 {
                     await Context.Channel.SendMessageAsync("King Crimson has activated...");
-                    KingCrimsonActivated = false; 
+                    KingCrimsonActivated = false;
+                    kingCrimsonCount = 0;
                 }
                 await Message.DeleteAsync();
                 kingCrimsonCount++;

@@ -8,8 +8,9 @@ namespace ike_bot.Core.Commands
 {
     public class JoJoReferences : ModuleBase<SocketCommandContext>
     {
-        ModerationCommands modCommands = new ModerationCommands();
-        AudioCommands audioCommands = new AudioCommands();
+        public ModerationService modService { get; set; }
+
+        public AudioService audioService { get; set; }
 
         [Command("JAH WARUDO")]
         [RequireUserPermission(GuildPermission.Administrator)] 
@@ -44,14 +45,13 @@ namespace ike_bot.Core.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task bitesTheDust()
         {
-            await Context.Channel.SendMessageAsync("bites the dust doesn't work right now... maybe next time dumpass");
-            await modCommands.PurgeChat(50);
+            await modService.DeleteMessages(Context, 50);
             await Context.Channel.SendMessageAsync("Bites the Dust has activated...");
         }
 
         [Command("KING CRIMSON")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task kingCrimson()
+        public async Task kingCrimson(int amount = 11)
         {
             if(Program.KingCrimsonActivated == true)
             {
@@ -62,9 +62,36 @@ namespace ike_bot.Core.Commands
             else
             {
                 Program.KingCrimsonActivated = true;
+                Program.kingCrimsonAmount = amount;
             }
         }
 
-        
+        [Command("ZA HANDO")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task zaHando(IUser discordUser = null)
+        {
+            if (discordUser == null)
+            {
+                await Context.Channel.SendMessageAsync("dumpass.... wrong args");
+            }
+            else
+            {
+                await audioService.JoinAndPlay(Context, "https://www.youtube.com/watch?v=FuM8GpMc59M");
+
+                var users = await Context.Channel.GetUsersAsync().FlattenAsync();
+                foreach (var user in users)
+                {
+                    if (user.Username == discordUser.Username)
+                    {
+                        await (user as IGuildUser).ModifyAsync(x =>
+                        {
+                            x.Channel = null;
+                        });
+                    }
+                }
+
+                await audioService.DisconnectAudio(Context, (Context.User as IGuildUser).VoiceChannel);
+            }
+        }
     }
 }
