@@ -40,6 +40,7 @@ namespace ike_bot
             foreach(var user in users)
             {
                 await RenameUser((user as SocketGuildUser), newName);
+                await Task.Delay(200);
             }
         }
     }
