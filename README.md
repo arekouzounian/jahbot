@@ -13,6 +13,7 @@ MAIN FEATURES:
 - spam: can send a simple message as many times as the command specifies
 - purge: deletes a certain amount of messages in the chat. 
 - music: given a link, jahbot can now play any youtube video in the channel you're in! 
+- cloud deployment: jahbot is now always online, using a remote server to be constantly up instead of having to run on my computer
 
 CURRENTLY IN PROGRESS:
 - random commands/features; added at the discretion of creator and usually are just shortcuts for other commands.
