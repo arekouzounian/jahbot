@@ -17,11 +17,7 @@ namespace ike_bot.Core.Commands
         public async Task stopTime(int seconds)
         {
             var demotedRole = Context.Guild.GetRole(579569542188236800) as IRole;
-            var Message = await Context.Channel.GetMessagesAsync(1).FlattenAsync();
-            foreach (var CmdMsg in Message)
-            {
-                await Context.Channel.DeleteMessageAsync(CmdMsg);
-            }
+            await modService.DeleteMessage(Context.Message as IMessage);
 
             await Context.Channel.SendMessageAsync("JAH WARUDO");
 

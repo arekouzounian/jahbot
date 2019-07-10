@@ -44,11 +44,7 @@ namespace ike_bot.Core.Commands
         [Command("retortPercent"), Alias("retortpercent", "RetortPercent")]
         public async Task setRetortPercent(int newPercent)
         {
-            var Message = await Context.Channel.GetMessagesAsync(1).FlattenAsync();
-            foreach (var CmdMsg in Message)
-            {
-                await Context.Channel.DeleteMessageAsync(CmdMsg);
-            }
+            await modService.DeleteMessage(Context.Message as IMessage);
             Program.retortPercent = newPercent;
         }
 
@@ -66,6 +62,13 @@ namespace ike_bot.Core.Commands
             }
 
             await (aChannel as ISocketMessageChannel).SendMessageAsync("a");
+        }
+
+        [Command("exit")]
+        [RequireOwner]
+        public async Task logOffJah()
+        {
+            Program.logOff = true; 
         }
     }
 }

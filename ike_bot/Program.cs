@@ -22,6 +22,8 @@ namespace ike_bot
         public int kingCrimsonCount = 0;
         public static int kingCrimsonAmount = 11;
 
+        public static bool logOff = false; 
+
         static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -61,11 +63,10 @@ namespace ike_bot
             await Client.LoginAsync(TokenType.Bot, services.GetService<ConfigHandler>().GetToken());
             await Client.StartAsync();
 
-
             await Task.Delay(-1);
         }
 
-
+        
         private async Task Client_Log(LogMessage Message)
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
@@ -80,6 +81,11 @@ namespace ike_bot
         int index = 0;
         private async Task HandleCommand(SocketMessage MessageParam)
         {
+            if (logOff == true)
+            {
+                await Client.LogoutAsync();
+            }
+
             var Message = MessageParam as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
