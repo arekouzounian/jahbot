@@ -67,9 +67,9 @@ namespace ike_bot
             await Task.Delay(-1);
         }
 
-        private async Task Commands_CommandExecuted(Optional<CommandInfo> arg1, ICommandContext arg2, IResult arg3)
+        private async Task Commands_CommandExecuted(Optional<CommandInfo> commandInfo, ICommandContext arg2, IResult result)
         {
-            Console.WriteLine("Command Executed.");
+            Console.WriteLine($"{result}: Command Executed.");
         }
 
         private async Task Client_Log(LogMessage Message)

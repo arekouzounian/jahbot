@@ -26,8 +26,12 @@ namespace ike_bot
             }
         }
 
-        public async Task RenameUser(SocketGuildUser user, string newName)
+        public async Task RenameUser(SocketCommandContext Context, SocketGuildUser user, string newName)
         {
+            if(user == Context.Guild.Owner)
+            {
+                return;
+            }
             await user.ModifyAsync(x =>
             {
                 x.Nickname = newName;
@@ -39,7 +43,7 @@ namespace ike_bot
             var users = await Context.Channel.GetUsersAsync().FlattenAsync();
             foreach(var user in users)
             {
-                await RenameUser((user as SocketGuildUser), newName);
+                await RenameUser(Context, (user as SocketGuildUser), newName);
                 //await Task.Delay(200);
             }
         }
