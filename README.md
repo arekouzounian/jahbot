@@ -17,4 +17,5 @@ MAIN FEATURES:
 
 CURRENTLY IN PROGRESS:
 - random commands/features; added at the discretion of creator and usually are just shortcuts for other commands.
+- universalJah: currently, jahbot can only join or access servers that I am moderators of, but now that jahbot is hosted online, I'm working on making jahbot universal so that anyone can invite him to their server. 
 
