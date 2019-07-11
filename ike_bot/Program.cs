@@ -59,6 +59,7 @@ namespace ike_bot
 
             Client.Ready += Client_Ready;
             Client.Log += Client_Log;
+            Commands.CommandExecuted += Commands_CommandExecuted;
 
             await Client.LoginAsync(TokenType.Bot, services.GetService<ConfigHandler>().GetToken());
             await Client.StartAsync();
@@ -66,7 +67,11 @@ namespace ike_bot
             await Task.Delay(-1);
         }
 
-        
+        private async Task Commands_CommandExecuted(Optional<CommandInfo> arg1, ICommandContext arg2, IResult arg3)
+        {
+            Console.WriteLine("Command Executed.");
+        }
+
         private async Task Client_Log(LogMessage Message)
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
@@ -138,6 +143,7 @@ namespace ike_bot
                 }
             }
 
+            
         }
 
 
