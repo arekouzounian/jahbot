@@ -18,4 +18,5 @@ MAIN FEATURES:
 CURRENTLY IN PROGRESS:
 - random commands/features; added at the discretion of creator and usually are just shortcuts for other commands.
 - universalJah: currently, jahbot can only join or access servers that I am moderators of, but now that jahbot is hosted online, I'm working on making jahbot universal so that anyone can invite him to their server. 
+- jahbot AI: working with the ML.NET libraries, I'm hoping to have a smart AI Chatbot for jahbot so that users can hold normal conversations with him
 
