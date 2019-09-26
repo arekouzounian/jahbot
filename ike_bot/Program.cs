@@ -118,7 +118,7 @@ namespace ike_bot
                 if(gen.Next(0, 6) <= 2)
                     await Context.Channel.SendFileAsync(@"C:\Users\agouz\Desktop\Important Pictures\deformedman.jpg");
                 else
-                    await Context.Channel.SendMessageAsync("fuck you");
+                    await Context.Channel.SendMessageAsync("shut up");
             }
 
             int ArgPos = 0;
