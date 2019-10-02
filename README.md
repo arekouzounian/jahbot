@@ -15,8 +15,14 @@ MAIN FEATURES:
 - music: given a link, jahbot can now play any youtube video in the channel you're in! 
 - cloud deployment: jahbot is now always online, using a remote server to be constantly up instead of having to run on my computer
 
+
+#HOW TO USE JAHBOT
+To start, each command for jahbot must start with 'jahbot.' Most of jahbot's commands are only accessible to admins and owners of the server, because they're really powerful things like renaming everyone on the server. There are many commands for jahbot (several of which are still in progress), and the easiest way to find them is to go into the code and see the commands and what they do for yourself. 
+
+
 CURRENTLY IN PROGRESS:
 - random commands/features; added at the discretion of creator and usually are just shortcuts for other commands.
 - universalJah: currently, jahbot can only join or access servers that I am moderators of, but now that jahbot is hosted online, I'm working on making jahbot universal so that anyone can invite him to their server. 
 - jahbot AI: working with the ML.NET libraries, I'm hoping to have a smart AI Chatbot for jahbot so that users can hold normal conversations with him
 
+Note: don't add him to your server. he's too powerful
