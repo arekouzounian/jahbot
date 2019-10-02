@@ -16,7 +16,7 @@ MAIN FEATURES:
 - cloud deployment: jahbot is now always online, using a remote server to be constantly up instead of having to run on my computer
 
 
-#HOW TO USE JAHBOT
+HOW TO USE JAHBOT:
 To start, each command for jahbot must start with 'jahbot.' Most of jahbot's commands are only accessible to admins and owners of the server, because they're really powerful things like renaming everyone on the server. There are many commands for jahbot (several of which are still in progress), and the easiest way to find them is to go into the code and see the commands and what they do for yourself. 
 
 
