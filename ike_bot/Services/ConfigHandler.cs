@@ -22,7 +22,7 @@ namespace ike_bot.Services
         {
             conf = new Config()
             {
-                token = "" //bot token lamo orang
+                token = "" 
             };
         }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -7,6 +9,7 @@ namespace ike_bot.Commands
 {
     public class RandomCommands : ModuleBase<SocketCommandContext>
     {
+        public ModerationService modService { get; set; }
 
         [Command("hi"), Alias("hello", "hey"), Summary("responds to the user")]
         public async Task Greeting()
@@ -64,11 +67,7 @@ namespace ike_bot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ChatSpeak()
         {
-            var Message = await Context.Channel.GetMessagesAsync(1).FlattenAsync();
-            foreach (var CmdMsg in Message)
-            {
-                await Context.Channel.DeleteMessageAsync(CmdMsg);
-            }
+            await modService.DeleteMessage(Context.Message as IMessage);
 
             string jahMessage;
             if (jahsehIsRunning == true)
@@ -99,6 +98,13 @@ namespace ike_bot.Commands
                 }
             }
 
+        }
+        
+        [Command("test")]
+        [RequireOwner]
+        public async Task test()
+        {
+            await Context.Channel.SendMessageAsync("test completed!");
         }
 
         [Command("find x")]
