@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
-namespace ike_bot.Core.Commands
+namespace ike_bot.Commands
 {
     public class RandomCommands : ModuleBase<SocketCommandContext>
     {
@@ -55,9 +55,7 @@ namespace ike_bot.Core.Commands
         [Command("help")]
         public async Task Help()
         {
-            var adminUser = await Context.Channel.GetUserAsync(220710429083697152);
-            string adminUsername = adminUser.Username;
-            await Context.Channel.SendMessageAsync($"if you want help ask {adminUsername}");
+            await Context.Channel.SendMessageAsync("go to the github (https://github.com/arekouzounian/jahbot) to see the code and what the bot does dumpass...");
         }
 
         bool jahsehDone = false;

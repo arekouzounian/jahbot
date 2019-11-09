@@ -3,34 +3,22 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 
-namespace ike_bot.Core.Commands
+using ike_bot.Services;
+
+namespace ike_bot.Commands
 { 
     public class ModerationCommands : ModuleBase<SocketCommandContext>
     {
         public ModerationCommands() { }
-
+        
+        public ModerationService moderationService { get; set; }
 
         [Command("rename")]
         [RequireUserPermission(GuildPermission.Administrator)]
         [RequireBotPermission(GuildPermission.ChangeNickname)]
         public async Task Rename(string newName)
         {
-            var users = await Context.Channel.GetUsersAsync().FlattenAsync();
-            foreach (IUser user in users)
-            {
-                var newUser = user as SocketGuildUser;
-                if (newUser.Id == 220710429083697152)
-                {
-                    continue;
-                }
-                else
-                {
-                    await newUser.ModifyAsync(x =>
-                    {
-                        x.Nickname = newName;
-                    });
-                }
-            }
+            await moderationService.RenameAll(Context, newName);
 
             await Context.Channel.SendMessageAsync("Done!");
 
@@ -41,7 +29,7 @@ namespace ike_bot.Core.Commands
         [RequireBotPermission(GuildPermission.ChangeNickname)]
         public async Task UnName()
         {
-            await Rename("");
+            await moderationService.RenameAll(Context, "");
         }
 
         [Command("delete", RunMode = RunMode.Async)]
@@ -50,12 +38,7 @@ namespace ike_bot.Core.Commands
         [RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task PurgeChat(int amount)
         {
-            var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
-
-            foreach (var message in messages)
-            {
-                await Context.Channel.DeleteMessageAsync(message);
-            }
+            await moderationService.DeleteMessages(Context, amount);
             const int delay = 5000;
             var m = await ReplyAsync($"Purge completed. _This message will be deleted in {delay / 1000} seconds._");
             await Task.Delay(delay);
@@ -76,8 +59,21 @@ namespace ike_bot.Core.Commands
         [Command("check a")]
         public async Task cleanChat(int amount)
         {
-            var aChannel = Context.Guild.GetChannel(579185404842999818);
-            var messages = await (aChannel as ISocketMessageChannel).GetMessagesAsync().FlattenAsync();
+            SocketGuildChannel aChannel = null;
+            var channels = Context.Guild.Channels;
+            foreach(var channel in channels)
+            {
+                if(channel.Name == "a")
+                {
+                    aChannel = channel;
+                }
+            }
+            if(aChannel == null)
+            {
+                await Context.Guild.Owner.SendMessageAsync("why is there no '#a' channel dumpass... that's one of my features so make it right now");
+            }
+
+            var messages = await (aChannel as ISocketMessageChannel).GetMessagesAsync(amount).FlattenAsync();
             foreach(var message in messages)
             {
                 if(message.Content != "a")

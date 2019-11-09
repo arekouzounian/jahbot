@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Security;
 using Newtonsoft.Json;
 
-namespace ike_bot
+namespace ike_bot.Services
 {
     class ConfigHandler
     {

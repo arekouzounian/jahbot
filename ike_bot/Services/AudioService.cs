@@ -5,7 +5,7 @@ using Discord.WebSocket;
 using System.Diagnostics;
 using Discord.Audio;
 
-namespace ike_bot
+namespace ike_bot.Services
 {
     public class AudioService 
     {
@@ -23,6 +23,19 @@ namespace ike_bot
             return await channel.ConnectAsync();
         }
 
+        public async Task DisconnectAudio(SocketCommandContext context)
+        {
+            var channel = (context.User as IGuildUser).VoiceChannel;
+            if (channel == null)
+            {
+                await context.Channel.SendMessageAsync("dumpass....");
+            }
+            else
+            {
+                await channel.DisconnectAsync();
+            }
+        }
+
         public async Task Stream(IAudioClient client, string url)
         {
             var ffmpeg = CreateYoutubeStream(url);
@@ -30,6 +43,18 @@ namespace ike_bot
             var discord = client.CreatePCMStream(AudioApplication.Mixed, 96000);
             await output.CopyToAsync(discord);
             await discord.FlushAsync();
+        }
+
+        public async Task JoinAndPlay(SocketCommandContext context, string url)
+        {
+            // IVoiceChannel channel = (context.User as IGuildUser).VoiceChannel;
+            var audioClient = await ConnectAudio(context);
+            if (audioClient == null)
+            {
+                return;
+            }
+
+            await Stream(audioClient, url);
         }
 
         private Process CreateYoutubeStream(string url)

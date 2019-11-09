@@ -8,6 +8,8 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
+using ike_bot.Services;
+
 namespace ike_bot
 {
     class Program
@@ -20,6 +22,7 @@ namespace ike_bot
 
         public static bool KingCrimsonActivated = false;
         public int kingCrimsonCount = 0;
+        public static int kingCrimsonAmount = 11;
 
         static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
@@ -46,6 +49,7 @@ namespace ike_bot
                 .AddSingleton(Commands)
                 .AddSingleton<ConfigHandler>()
                 .AddSingleton<AudioService>()
+                .AddSingleton<ModerationService>()
                 .BuildServiceProvider();
 
             await services.GetService<ConfigHandler>().FillConfig();
@@ -62,7 +66,7 @@ namespace ike_bot
 
             await Task.Delay(-1);
         }
-        
+
         private async Task Client_Log(LogMessage Message)
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source}] {Message.Message}");
@@ -80,16 +84,20 @@ namespace ike_bot
             var Message = MessageParam as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
-            if(KingCrimsonActivated)
+            if (KingCrimsonActivated)
             {
                 retortPercent = 0;
-                if(kingCrimsonCount == 10)
+                if (kingCrimsonCount == kingCrimsonAmount)
                 {
                     await Context.Channel.SendMessageAsync("King Crimson has activated...");
-                    KingCrimsonActivated = false; 
+                    kingCrimsonCount = 0;
+                    KingCrimsonActivated = false;
                 }
-                await Message.DeleteAsync();
-                kingCrimsonCount++;
+                else
+                {
+                    await Message.DeleteAsync();
+                    kingCrimsonCount++;
+                }
             }
 
             if (Context.Message == null || Context.Message.Content == "") return;
@@ -98,28 +106,25 @@ namespace ike_bot
             antiSpam(Message.Author.Id, Context);
 
             Random gen = new Random();
-            if (gen.Next(0, 101) <= retortPercent && Context.Channel.Id != 579185404842999818)
+            if (gen.Next(0, 101) <= retortPercent && Context.Channel.Name != "a")
             {
-                if(gen.Next(0, 6) <= 2)
-                    await Context.Channel.SendFileAsync(@"C:\Users\agouz\Desktop\Important Pictures\deformedman.jpg");
-                else
-                    await Context.Channel.SendMessageAsync("fuck you");
+                await Context.Channel.SendMessageAsync("fuck you");
             }
 
             int ArgPos = 0;
 
-            if ((Context.Channel.Id == 579185404842999818 && Context.Message.Content != "a"))
+            if ((Context.Channel.Name == "a" && Context.Message.Content != "a"))
                 await Context.Channel.DeleteMessageAsync(Message.Id);
             if (!(Message.HasStringPrefix("jahbot ", ref ArgPos)) || (Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos)))
                 return;
-            
+
 
             var Result = await Commands.ExecuteAsync(Context, ArgPos, services);
 
             if (!Result.IsSuccess)
             {
                 Console.WriteLine($"{DateTime.Now} at Commands] Something went wrong with executing a command. Text: {Context.Message.Content} | Error: {Result.ErrorReason}");
-                if (Context.Channel.Id != 579185404842999818)
+                if (Context.Channel.Name != "a")
                 {
                     if (Result.ErrorReason == "User requires guild permission Administrator.")
                         await Context.Channel.SendMessageAsync("dumpass... you need special perms to use this command.");
@@ -133,14 +138,29 @@ namespace ike_bot
 
         private async void antiSpam(ulong id, SocketCommandContext Context)
         {
-            if (Context.Channel.Id == 579185404842999818)
+            if (Context.Channel.Name == "a")
                 return;
-            
+
             lastMessageIDs.Add(id);
             var users = await Context.Channel.GetUsersAsync().FlattenAsync();
             ulong mostMessagesID = 0;
             int mostMessagesCount = 0;
-            var demotedRole = Context.Guild.GetRole(579569542188236800) as IRole;
+            IRole demotedRole = null; // = Context.Guild.GetRole(579569542188236800) as IRole;
+            var roles = Context.Guild.Roles;
+            foreach (var role in roles)
+            {
+                if (role.Name == "demoted")
+                {
+                    demotedRole = role as IRole;
+                }
+            }
+
+            if (demotedRole == null)
+            {
+                await Context.Guild.Owner.SendMessageAsync("you dumpass... I'm trying to mute someone because they're spamming but there's no 'demoted' role. Make a role" +
+                    "called 'demoted' on the server, and give it no perms as punishment for those dumpasses....");
+            }
+
             foreach (var user in users)
             {
                 if (user.IsBot)
