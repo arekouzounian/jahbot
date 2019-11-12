@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace ike_bot.Commands
 {
@@ -59,6 +60,22 @@ namespace ike_bot.Commands
         public async Task Help()
         {
             await Context.Channel.SendMessageAsync("go to the github (https://github.com/arekouzounian/jahbot) to see the code and what the bot does dumpass...");
+        }
+
+        [Command("lockName")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task LockName(string lockname, IUser user)
+        {
+            Program.lockedName = lockname;
+            Program.lockedUser = user;
+            if(user.Username != lockname)
+            {
+                await (user as SocketGuildUser).ModifyAsync(x =>
+                {
+                    x.Nickname = lockname;
+                });
+            }
+            
         }
 
         bool jahsehDone = false;
