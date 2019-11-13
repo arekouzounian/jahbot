@@ -78,43 +78,37 @@ namespace ike_bot.Commands
             
         }
 
-        bool jahsehDone = false;
-        bool jahsehIsRunning = false;
         [Command("jahseh")]
-        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ChatSpeak()
         {
+            if(Context.Message.Author.Id != 220710429083697152) 
+            {
+                return;    
+            }
             await modService.DeleteMessage(Context.Message as IMessage);
 
             string jahMessage;
-            if (jahsehIsRunning == true)
-            {
-                await Context.Channel.SendMessageAsync("this command is already in effect");
-            }
-            else
-            {
-                while (!jahsehDone)
-                {
-                    jahMessage = Console.ReadLine();
-                    if (jahMessage == "terminate")
-                    {
-                        jahsehDone = true;
-                        jahsehIsRunning = false;
-                        break; 
-                    }
-                    if (jahMessage == "")
-                    {
-                        await Context.Channel.SendMessageAsync("s");
-                    }
-                    else
-                    {
-                        await Context.Channel.SendMessageAsync(jahMessage);
-                    }
-                    jahsehIsRunning = true;
-                    
-                }
-            }
 
+             while (!jahsehDone)
+             {
+                jahMessage = Console.ReadLine();
+                if (jahMessage == "terminate")
+                {
+                    jahsehDone = true;
+                    jahsehDone = true;
+                    break; 
+                }
+                if (jahMessage == "")
+                {
+                    await Context.Channel.SendMessageAsync("s");
+                }
+                else
+                {
+                    await Context.Channel.SendMessageAsync(jahMessage);
+                }
+                jahsehIsRunning = true;
+                       
+             }
         }
         
         [Command("test")]
