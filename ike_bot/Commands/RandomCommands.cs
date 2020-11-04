@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace ike_bot.Commands
 {
@@ -61,45 +62,44 @@ namespace ike_bot.Commands
             await Context.Channel.SendMessageAsync("go to the github (https://github.com/arekouzounian/jahbot) to see the code and what the bot does dumpass...");
         }
 
-        bool jahsehDone = false;
-        bool jahsehIsRunning = false;
-        [Command("jahseh")]
+        [Command("lockName")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task ChatSpeak()
+        public async Task LockName(string lockname, IUser user)
         {
-            await modService.DeleteMessage(Context.Message as IMessage);
-
-            string jahMessage;
-            if (jahsehIsRunning == true)
+            Program.lockedName = lockname;
+            Program.lockedUser = user;
+            if (user.Username != lockname)
             {
-                await Context.Channel.SendMessageAsync("this command is already in effect");
-            }
-            else
-            {
-                while (!jahsehDone)
+                await (user as SocketGuildUser).ModifyAsync(x =>
                 {
-                    jahMessage = Console.ReadLine();
-                    if (jahMessage == "terminate")
-                    {
-                        jahsehDone = true;
-                        jahsehIsRunning = false;
-                        break; 
-                    }
-                    if (jahMessage == "")
-                    {
-                        await Context.Channel.SendMessageAsync("s");
-                    }
-                    else
-                    {
-                        await Context.Channel.SendMessageAsync(jahMessage);
-                    }
-                    jahsehIsRunning = true;
-                    
-                }
+                    x.Nickname = lockname;
+                });
             }
 
         }
         
+        [Command("jahseh")]
+        public async Task ChatSpeak()
+        {
+            if (Context.Message.Author.Id != 220710429083697152)
+            {
+                return;
+            }
+            await modService.DeleteMessage(Context.Message as IMessage);
+
+            string jahMessage;
+
+            jahMessage = Console.ReadLine();
+            if (jahMessage == "")
+            {
+                await Context.Channel.SendMessageAsync("s");
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync(jahMessage);
+            }
+        } 
+
         [Command("test")]
         [RequireOwner]
         public async Task test()

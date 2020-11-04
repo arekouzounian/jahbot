@@ -19,6 +19,8 @@ namespace ike_bot
         private IServiceProvider services;
 
         public static int retortPercent = 10;
+        public static string lockedName = "";
+        public static IUser lockedUser;
 
         public static bool KingCrimsonActivated = false;
         public int kingCrimsonCount = 0;
@@ -59,12 +61,24 @@ namespace ike_bot
 
             Client.Ready += Client_Ready;
             Client.Log += Client_Log;
+            Client.GuildMemberUpdated += Client_GuildMemberUpdated;
 
             await Client.LoginAsync(TokenType.Bot, services.GetService<ConfigHandler>().GetToken());
             await Client.StartAsync();
 
 
             await Task.Delay(-1);
+        }
+
+        private async Task Client_GuildMemberUpdated(SocketGuildUser user1, SocketGuildUser user2)
+        {
+            if (user2 == lockedUser && user2.Nickname != lockedName)
+            {
+                await user1.ModifyAsync(x =>
+                {
+                    x.Nickname = lockedName;
+                });
+            }
         }
 
         private async Task Client_Log(LogMessage Message)
@@ -135,7 +149,7 @@ namespace ike_bot
 
         }
 
-
+        /*
         private async void antiSpam(ulong id, SocketCommandContext Context)
         {
             if (Context.Channel.Name == "a")
@@ -198,5 +212,6 @@ namespace ike_bot
             }
 
         }
+        */
     }
 }
