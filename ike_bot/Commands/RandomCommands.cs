@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -68,38 +68,49 @@ namespace ike_bot.Commands
         {
             Program.lockedName = lockname;
             Program.lockedUser = user;
-            if (user.Username != lockname)
+            if(user.Username != lockname)
             {
                 await (user as SocketGuildUser).ModifyAsync(x =>
                 {
                     x.Nickname = lockname;
                 });
             }
-
+            
         }
-        
+
         [Command("jahseh")]
         public async Task ChatSpeak()
         {
-            if (Context.Message.Author.Id != 220710429083697152)
+            if(Context.Message.Author.Id != 220710429083697152) 
             {
-                return;
+                return;    
             }
             await modService.DeleteMessage(Context.Message as IMessage);
 
             string jahMessage;
 
-            jahMessage = Console.ReadLine();
-            if (jahMessage == "")
-            {
-                await Context.Channel.SendMessageAsync("s");
-            }
-            else
-            {
-                await Context.Channel.SendMessageAsync(jahMessage);
-            }
-        } 
-
+             while (!jahsehDone)
+             {
+                jahMessage = Console.ReadLine();
+                if (jahMessage == "terminate")
+                {
+                    jahsehDone = true;
+                    jahsehDone = true;
+                    break; 
+                }
+                if (jahMessage == "")
+                {
+                    await Context.Channel.SendMessageAsync("s");
+                }
+                else
+                {
+                    await Context.Channel.SendMessageAsync(jahMessage);
+                }
+                jahsehIsRunning = true;
+                       
+             }
+        }
+        
         [Command("test")]
         [RequireOwner]
         public async Task test()
