@@ -117,7 +117,6 @@ namespace ike_bot
             if (Context.Message == null || Context.Message.Content == "") return;
             if (Context.User.IsBot) return;
 
-            antiSpam(Message.Author.Id, Context);
 
             Random gen = new Random();
             if (gen.Next(0, 101) <= retortPercent && Context.Channel.Name != "a")

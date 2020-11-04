@@ -62,10 +62,26 @@ namespace ike_bot.Commands
             await Context.Channel.SendMessageAsync("go to the github (https://github.com/arekouzounian/jahbot) to see the code and what the bot does dumpass...");
         }
 
+        [Command("lockName")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task LockName(string lockname, IUser user)
+        {
+            Program.lockedName = lockname;
+            Program.lockedUser = user;
+            if (user.Username != lockname)
+            {
+                await (user as SocketGuildUser).ModifyAsync(x =>
+                {
+                    x.Nickname = lockname;
+                });
+            }
+
+        }
+
         bool jahsehDone = false;
         bool jahsehIsRunning = false;
         [Command("jahseh")]
-        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireOwner]
         public async Task ChatSpeak()
         {
             await modService.DeleteMessage(Context.Message as IMessage);
@@ -98,8 +114,9 @@ namespace ike_bot.Commands
                     
                 }
             }
-
         }
+
+
         
         [Command("test")]
         [RequireOwner]
